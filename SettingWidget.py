@@ -157,10 +157,10 @@ class SettingWidget(QWidget):
         self.label_textformat.setAlignment(Qt.AlignLeft)
 
         self.label_textformat_info = QLabel()
-        self.label_textformat_info.setFixedHeight(100)
+        self.label_textformat_info.setFixedHeight(90)
         self.label_textformat_info.setAlignment(Qt.AlignLeft)
         self.label_textformat_info.setStyleSheet("font-family:Microsoft Yahei;font-size:12px;color:gray;")
-        self.label_textformat_info.setText("    请在模板中你想要的位置插入一下关键字，系统会自动替换为相应的数据：\n    图片创建的:\n\t年：{year}\t月：{month}\t日：{day}\n\t时：{hour}\t分：{minute}\t秒：{second}\n    图片的名称: {name}")
+        self.label_textformat_info.setText("    请在模板中你想要的位置插入以下关键字，系统会自动替换为相应的数据：\n    图片创建的:\n\t年：{year}\t月：{month}\t日：{day}\n\t时：{hour}\t分：{minute}\t秒：{second}\n    图片的名称: {name}")
 
         self.lineedit_textformat = QLineEdit()
         self.lineedit_textformat.setFixedHeight(30)
@@ -300,7 +300,7 @@ class SettingWidget(QWidget):
         sa_contentLayout.addStretch()
 
         self.sa_contentWidget = QWidget()
-        self.sa_contentWidget.setFixedSize(600, 400)
+        self.sa_contentWidget.setFixedSize(600, 450)
         self.sa_contentWidget.setLayout(sa_contentLayout)
 
         self.sa_Settings = QScrollArea()
