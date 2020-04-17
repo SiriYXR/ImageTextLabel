@@ -10,6 +10,8 @@ import time
 import cv2
 import numpy
 import configparser
+import exifread
+import datetime
 
 from PyQt5.QtCore import Qt,QRect
 from PyQt5.QtGui import QImage,QPixmap,QPainter,QColor,QFont,qRed, qGreen, qBlue
@@ -241,16 +243,27 @@ class ImgObject(object):
 
         config = configparser.ConfigParser()
         config.read("init.ini", encoding="utf8")
-        creatTimeStamp = os.path.getctime(self.filepath)
-        timeStruct = time.localtime(creatTimeStamp)
-        timeinfo = time.strftime('%Y %m %d %H %M %S', timeStruct).split(' ')
+
+        f= open(self.filepath, 'rb')
+        tags = exifread.process_file(f)
+
+        timeinfo=None
+
+        if 'EXIF DateTimeOriginal' in tags.keys():
+            timestr=tags['EXIF DateTimeOriginal'].printable
+            imgctime=time.strptime(tags['EXIF DateTimeOriginal'].printable, "%Y:%m:%d %H:%M:%S")
+            timeinfo =[imgctime.tm_year,imgctime.tm_mon,imgctime.tm_mday,imgctime.tm_hour,imgctime.tm_min,imgctime.tm_sec]
+        else:
+            creatTimeStamp = os.path.getctime(self.filepath)
+            timeStruct = time.localtime(creatTimeStamp)
+            timeinfo = time.strftime('%Y %m %d %H %M %S', timeStruct).split(' ')
         format = config.get("IMG","textformat")
-        format = format.replace('{year}', timeinfo[0])
-        format = format.replace('{month}', timeinfo[1])
-        format = format.replace('{day}', timeinfo[2])
-        format = format.replace('{hour}', timeinfo[3])
-        format = format.replace('{minute}', timeinfo[4])
-        format = format.replace('{second}', timeinfo[5])
+        format = format.replace('{year}', str(timeinfo[0]))
+        format = format.replace('{month}', str(timeinfo[1]))
+        format = format.replace('{day}', str(timeinfo[2]))
+        format = format.replace('{hour}', str(timeinfo[3]))
+        format = format.replace('{minute}', str(timeinfo[4]))
+        format = format.replace('{second}', str(timeinfo[5]))
         format = format.replace('{name}', self.filename.split('.')[0])
         self.text=format
         self.textsize = int(config.get("IMG", "textsize"))
