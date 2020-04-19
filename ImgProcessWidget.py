@@ -12,6 +12,7 @@ import numpy
 import configparser
 import exifread
 import datetime
+from PIL import ImageQt,Image
 
 from PyQt5.QtCore import Qt,QRect
 from PyQt5.QtGui import QImage,QPixmap,QPainter,QColor,QFont,qRed, qGreen, qBlue
@@ -459,7 +460,9 @@ class ImgProcessWidget(QWidget):
             img = self.CVMat2QImage(cvimg)
             img = self.drawImage(img, i.text,i.textsize,i.textoffset,
                            i.colorr,i.colorg,i.colorb)
-            img.save(outportPath+'/'+i.filename.split('.')[0]+'.png')
+            #img.save(outportPath+'/'+i.filename.split('.')[0]+'.png')
+            pimg=ImageQt.fromqimage(img)
+            pimg.save(outportPath+'/'+i.filename)
 
         self.fWindow.statusBar().showMessage('保存结束!')
 
